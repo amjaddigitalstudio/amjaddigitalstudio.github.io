@@ -186,6 +186,21 @@ footer .socl:hover{color:var(--gold)}
 .why::before{content:"\2713";color:var(--gold);font-weight:800}
 .info{display:flex;flex-direction:column;gap:2px;font-size:17px}
 .info b{font-weight:700}
+
+/* gallery */
+.gtabs{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 20px}
+.gtab{cursor:pointer;font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:999px;background:#111F44;color:var(--text);border:1px solid var(--line)}
+.gtab[aria-selected=true]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.gg{columns:3 300px;column-gap:16px}
+.gi{break-inside:avoid;margin:0 0 16px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:block;width:100%;padding:0;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.gi img{display:block;width:100%;height:auto}
+.gi span{display:block;padding:12px 14px;font-size:14px;color:var(--muted)}
+.gi b{display:block;color:var(--text);font-size:15px}
+#lb{position:fixed;inset:0;background:rgba(3,8,20,.94);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:12px}
+#lb p{color:var(--soft);margin:0;text-align:center;font-size:15px}
+#lb button{position:absolute;top:14px;right:14px;font:inherit;font-weight:700;padding:10px 16px;border-radius:999px;border:0;background:var(--gold);color:var(--ink);cursor:pointer}
 </style>
 </head>
 <body>
@@ -288,6 +303,9 @@ footer .socl:hover{color:var(--gold)}
 <div class="row"><span class="thumb">"Flying Car? The Truth"</span><span class="thumb">"From Outcast to Conqueror"</span><span class="thumb">"How Did They Build This?"</span><span class="thumb">"3 Continents, One Empire"</span><span class="thumb">"Vikings Reached America First?"</span></div>
 <a class="more" data-wa="Hi Amjad, I want thumbnails for my channel." href="#" style="align-self:flex-start">Get thumbnails for my channel →</a>
 </div>
+<div style="margin-top:44px" id="gallery"><span class="eyebrow">Design and concept gallery</span><h3 class="h2" style="font-size:clamp(26px,4vw,38px)">Thumbnails, film concepts, posters and ads.</h3><p class="lead">My own creative work, made with AI tools and designed by me. Tap any image to view it larger. Items marked "Sample" are concept pieces I made to show my style, not paid client work.</p>
+<div class="gtabs" role="tablist" id="gtabs"></div><div class="gg" id="gg"></div></div>
+<div id="lb" role="dialog" aria-label="Image viewer"><button type="button" id="lbx">Close</button><img alt="" id="lbi"><p id="lbt"></p></div>
 <div class="band"><div><h3>See more of my work</h3><p>Open my YouTube channel and a Facebook page I manage for a client.</p></div><div class="row"><a class="btn btn-gold" href="https://youtube.com/@onestopped" target="_blank" rel="noopener">YouTube channel</a><a class="btn btn-line" href="https://facebook.com/premierlh" target="_blank" rel="noopener">Client-managed page</a></div></div>
 </section>
 
@@ -497,6 +515,34 @@ var sc=document.getElementById("socContact");
 sc.innerHTML=socials.map(function(x){return '<a class="socl" href="'+x[1]+'" target="_blank" rel="noopener" aria-label="'+x[0]+': Amjad Ali Bhutto"><span class="si"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">'+x[2]+'</svg></span><span>'+x[0]+'</span></a>';}).join("");
 
 Array.prototype.forEach.call(document.querySelectorAll("[data-wa]"),function(a){a.href=wa(a.getAttribute("data-wa"));a.target="_blank";a.rel="noopener";});
+
+var gal=[
+["Thumbnails","egypt","How Did They Build This?","History thumbnail, Kingdom Lore style"],
+["Thumbnails","ottoman","3 Continents. One Empire.","History thumbnail, Kingdom Lore style"],
+["Thumbnails","vikings","Vikings Reached America First?","History thumbnail, Kingdom Lore style"],
+["Thumbnails","german","Warum sonntags geschlossen?","German-language thumbnail"],
+["Film and storyboards","steelheart","Steel Heart, scene storyboard","15-second storyboard with shot list and character key"],
+["Film and storyboards","goldmine","The Gold Mine Guardian","20-second horror concept, 10 frames with sound design"],
+["Film and storyboards","char-sheet","Character sheet, The Real Bhutto","Character design with expressions, costume and wound progression"],
+["Film and storyboards","env-docks","Environment sheet, Docks","Location design for a film concept"],
+["Film and storyboards","env-farmhouse","Environment sheet, Farmhouse","Location design for a film concept"],
+["Film and storyboards","jungle","Jungle Adventure poster","Sample cinematic short-film poster"],
+["Ads and branding","fanta-1","Sample video ad, Fanta","Sample ad concept for my video-ad service"],
+["Ads and branding","fanta-2","Sample video ad, Fanta","Sample ad concept for my video-ad service"],
+["Ads and branding","shoe-ad","Shoe sale poster","Sample social media ad design"],
+["Ads and branding","urdu-ad","Urdu ad creative comparison","Urdu social media post design"],
+["Ads and branding","energy-1","Energy drink lifestyle storyboard","Sample 16-frame ad storyboard"],
+["Ads and branding","energy-2","Energy drink lifestyle storyboard","Sample 16-frame ad storyboard, realistic style"],
+["Ads and branding","terror-banner","Terror Trail channel banner","Channel banner design"],
+["Ads and branding","terror-logo","Terror Trail logo","Channel logo design"]];
+var gcats=["All","Thumbnails","Film and storyboards","Ads and branding"],gcur="All";
+function gshow(){document.getElementById("gtabs").innerHTML=gcats.map(function(c){return '<button type="button" role="tab" class="gtab" aria-selected="'+(c===gcur)+'" data-c="'+c+'">'+c+'</button>';}).join("");
+document.getElementById("gg").innerHTML=gal.map(function(g,i){return (gcur==="All"||g[0]===gcur)?'<button type="button" class="gi" data-i="'+i+'"><img loading="lazy" src="work/'+g[1]+'.jpg" alt="'+esc(g[2])+'"><span><b>'+esc(g[2])+'</b>'+esc(g[3])+'</span></button>':"";}).join("");}
+gshow();
+document.getElementById("gtabs").addEventListener("click",function(e){var b=e.target.closest(".gtab");if(b){gcur=b.dataset.c;gshow();}});
+document.getElementById("gg").addEventListener("click",function(e){var b=e.target.closest(".gi");if(!b)return;var g=gal[b.dataset.i];document.getElementById("lbi").src="work/"+g[1]+".jpg";document.getElementById("lbi").alt=g[2];document.getElementById("lbt").textContent=g[2]+" · "+g[3];document.getElementById("lb").className="on";});
+function lbclose(){document.getElementById("lb").className="";}
+document.getElementById("lbx").onclick=lbclose;document.getElementById("lb").addEventListener("click",function(e){if(e.target.id==="lb")lbclose();});document.addEventListener("keydown",function(e){if(e.key==="Escape")lbclose();});
 })();
 </script>
 </body>
