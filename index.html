@@ -201,6 +201,14 @@ footer .socl:hover{color:var(--gold)}
 #lb img{max-width:100%;max-height:80vh;border-radius:12px}
 #lb p{color:var(--soft);margin:0;text-align:center;font-size:15px}
 #lb button{position:absolute;top:14px;right:14px;font:inherit;font-weight:700;padding:10px 16px;border-radius:999px;border:0;background:var(--gold);color:var(--ink);cursor:pointer}
+
+.vg{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:16px 0 8px}
+.vc{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;color:var(--text);text-decoration:none}
+.vc:hover{border-color:var(--gold)}
+.vc i{flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);display:grid;place-items:center}
+.vc i:after{content:"";border-left:14px solid var(--ink);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.vc b{display:block;font-size:16px;line-height:1.3}.vc span{font-size:13px;color:var(--muted)}
+.vh{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin:30px 0 0}
 </style>
 </head>
 <body>
@@ -306,6 +314,10 @@ footer .socl:hover{color:var(--gold)}
 <div style="margin-top:44px" id="gallery"><span class="eyebrow">Design and concept gallery</span><h3 class="h2" style="font-size:clamp(26px,4vw,38px)">Thumbnails, film concepts, posters and ads.</h3><p class="lead">My own creative work, made with AI tools and designed by me. Tap any image to view it larger. Items marked "Sample" are concept pieces I made to show my style, not paid client work.</p>
 <div class="gtabs" role="tablist" id="gtabs"></div><div class="gg" id="gg"></div></div>
 <div id="lb" role="dialog" aria-label="Image viewer"><button type="button" id="lbx">Close</button><img alt="" id="lbi"><p id="lbt"></p></div>
+<div style="margin-top:48px" id="videos"><span class="eyebrow">Video work</span><h3 class="h2" style="font-size:clamp(26px,4vw,38px)">Watch my video ads and projects.</h3><p class="lead">Full videos open in Google Drive, no sign-in needed. Tap any card to watch.</p>
+<div class="row" style="margin-top:14px"><a class="btn btn-gold" href="https://drive.google.com/drive/folders/1AYcvsJaZdQwoQlMKE3VsdTfqnP7i9sVA?usp=sharing" target="_blank" rel="noopener">Open all videos</a></div>
+<h4 class="vh">Professional ad videos</h4><div class="vg" id="vAds"></div>
+<h4 class="vh">More video projects</h4><div class="vg" id="vMore"></div></div>
 <div class="band"><div><h3>See more of my work</h3><p>Open my YouTube channel and a Facebook page I manage for a client.</p></div><div class="row"><a class="btn btn-gold" href="https://youtube.com/@onestopped" target="_blank" rel="noopener">YouTube channel</a><a class="btn btn-line" href="https://facebook.com/premierlh" target="_blank" rel="noopener">Client-managed page</a></div></div>
 </section>
 
@@ -543,6 +555,12 @@ document.getElementById("gtabs").addEventListener("click",function(e){var b=e.ta
 document.getElementById("gg").addEventListener("click",function(e){var b=e.target.closest(".gi");if(!b)return;var g=gal[b.dataset.i];document.getElementById("lbi").src="work/"+g[1]+".jpg";document.getElementById("lbi").alt=g[2];document.getElementById("lbt").textContent=g[2]+" · "+g[3];document.getElementById("lb").className="on";});
 function lbclose(){document.getElementById("lb").className="";}
 document.getElementById("lbx").onclick=lbclose;document.getElementById("lb").addEventListener("click",function(e){if(e.target.id==="lb")lbclose();});document.addEventListener("keydown",function(e){if(e.key==="Escape")lbclose();});
+
+var D="https://drive.google.com/file/d/",V="/view?usp=sharing";
+var vAds=[["Beauty ad","1_Oe7k_zQcrFQVfh3yBaGUFrce5TJbyL2"],["Fashion ad","11A5uMS_QSleYp9UEKcTN_eB7PO-N9qXM"],["Fanta ad (sample)","1wVYUihmqa3OGc2oqpNpf2XNrVsX7MkvR"],["Ad video","1Y55L3AnnqJe5fMT6_WFL7wdmC0EdoEDL"],["Ad portfolio reel","1QSBpGqgLeAtimN9tr0cOkaoSi5C-0bu8"]];
+var vMore=[["Client podcast video","1wkWxPplaJf8YTijjhtWv66clbhjh2XLb"],["Podcast video","1iQuDZz0JyH2C3aR4jM6DLJzSU8z9QYCG"],["Client work","1EvrGtD0WfW9neWNStJ5uGmr61jCR45kK"],["My short movie","1IkUx4nRLp3H6hfxpgCZhQywjmdhE4gz3"],["Glory Lawani","1oAoCo9S-6OZBLvN5rar1Y3tM3Pyf5FAv"],["Portfolio video 1","1wk3GGRfy1pslrwJ72T4g5Aw2tPNuCQpi"],["Portfolio video 3","1702JpSpyttkCr1FOGPaxG8OjObrvxSx7"],["Portfolio video 4","1MSbN82UZfEBdq1wrkXQnE0tB9kPGfKux"],["Portfolio video 5","1DWpH7EUlyfRea4MfO1oQNszoePaaclVQ"],["Portfolio video 6","1kNEf0RY18U5lMakP8YfhTXcRrru6WOMe"],["Creative video 1","1xk_1FY9pMEOjccnERuOUOph3UIgIpB2k"],["Creative video 2","1w3RGPDfseR3pqNnr_2inYNI4rcXLFIzw"]];
+function vcards(a){return a.map(function(v){return '<a class="vc" href="'+D+v[1]+V+'" target="_blank" rel="noopener"><i></i><div><b>'+esc(v[0])+'</b><span>Watch video</span></div></a>';}).join("");}
+document.getElementById("vAds").innerHTML=vcards(vAds);document.getElementById("vMore").innerHTML=vcards(vMore);
 })();
 </script>
 </body>
